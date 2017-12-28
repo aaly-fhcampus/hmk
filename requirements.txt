@@ -1,0 +1,5 @@
+blueprint
+Flask
+Flask-Bootstrap
+Flask-SocketIO
+Flask-SQLAlchemy

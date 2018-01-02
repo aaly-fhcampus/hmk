@@ -19,3 +19,13 @@ class CardDeck(db.Model):
 
     def __repr__(self):
         return '<id {}>'.format(self.id)
+
+    @property
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'cards': self.cards,
+            'deck_type': self.deck_type,
+            'player_id': self.player_id
+        }

@@ -34,6 +34,17 @@ class Card(db.Model):
         'polymorphic_on': 'type'
     }
 
+    @property
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'category': self.category,
+            'color': self.color,
+            'uid': self.uid,
+            'type': self.type
+        }
+
 
 class AchMeinDein(Card):
     __tablename__ = None

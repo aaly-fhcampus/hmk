@@ -7,13 +7,7 @@
 {% endblock %}
 {% block content %}
 <div class="main-content" id="main_content">
-    <div class="login">
-        <h3>Please type in your name</h3><br>
-        <div class="row">
-            <div class="col-xs-8"><input type="text" name="name" class="form-control" placeholder="Name"></div>
-            <div class="col-xs-2"><input type="button" name="login" class="btn btn-primary btn-md" value="Login"></div>
-        </div>
-    </div>
+
     <div class="lobby">
         <table class="table table-striped" style="width: 100%; height: 90%;">
             <thead>
@@ -24,8 +18,15 @@
             </thead>
             <tbody id="table-body"></tbody>
         </table>
-        <div class="row" style="width:100%; height:10%">
-            <div class="col-xs-12 text-right">
+        <div id="playground_buttons" class="row" style="width:100%; height:10%">
+            <div class="col-xs-6">
+                <input type="text" name="search_ground_name" class="form-control" placeholder="Search ...">
+            </div>
+            <div class="col-xs-2">
+                <button id="search_playgrounds" class="btn btn-success btn-md">Search Playground</button>
+            </div>
+            <div class="col-xs-4 text-right">
+                <button id="refresh_playgrounds" class="btn btn-default btn-md">Refresh Playgrounds</button>
                 <button id="create_playground" class="btn btn-primary btn-md">Create Playgound</button>
             </div>
         </div>
@@ -40,6 +41,15 @@
 <script type="text/template" id="lobby-template">
     <td><%= name %></td>
     <td><%= players %></td>
+</script>
+<script type="text/template" id="login-template">
+    <div class="login">
+        <h3>Please type in your name</h3><br>
+        <div class="row">
+            <div class="col-xs-8"><input type="text" name="name" class="form-control" placeholder="Name"></div>
+            <div class="col-xs-2"><input type="button" name="login" class="btn btn-primary btn-md" value="Login"></div>
+        </div>
+    </div>
 </script>
 <script type="text/template" id="modal-template">
     <div class="bbm-modal__topbar">
@@ -57,6 +67,8 @@
 <script type="text/javascript" src="static/lib/backbone-min.js"></script>
 <script type="text/javascript" src="static/lib/backbone.modal.js"></script>
 <script type="text/javascript" src="static/lib/socket.io.js"></script>
+<script type="text/javascript" src="static/js/model.js"></script>
+<script type="text/javascript" src="static/js/view.js"></script>
 <script type="text/javascript" src="static/js/main.js"></script>
 
 

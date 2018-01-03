@@ -19,8 +19,14 @@ def register_player(data):
 
 @socketio.on('create_playground')
 def create_playground(data):
-    playground = PlayGround(data.get('name'), None, None, None, 5)
-    db.session.add_all([playground])
+    draw_pile = CardDeck("DRAW PILE", [], DeckType.DRAW_PILE)
+    cards = draw_pile.create_draw_pile()
+    draw_pile.cards = cards
+    discard_pile = CardDeck("DISCARD PILE", [], DeckType.DISCARD_DECK)
+
+    playground = PlayGround(data.get('name'), None, draw_pile, discard_pile, 5)
+    db.session.add_all([playground, draw_pile, discard_pile])
+    db.session.add_all(cards)
     db.session.commit()
     emit('create_playground', {'data': playground.serialize})
     

@@ -30,6 +30,7 @@ var PlayGroundView = Backbone.View.extend({
         _.bindAll(this, 'render');
     },
     render: function() {
+        this.model.attributes.playground_player = ""+this.model.attributes.players.length+" / "+this.model.attributes.max_players;
         this.$el.html(this.template(this.model.attributes));
         return this;
     },
@@ -46,25 +47,16 @@ var PlayGroundsView = Backbone.View.extend({
 
     initialize: function() {
         this.playGrounds = new PlayGroundCollection();
-        this.load_data();
-//        this.render();
-    },
-    load_data: function(){
-        var self = this;
+        this.playGrounds.fetch();
+        this.render();
 
-        Backbone.ajax({
-            dataType: "json",
-            url: "get_lobby",
-            success: function(data){
-                console.log(data);
-                self.playGrounds.add(data);
-                self.render();
-            }
-        });
+        this.playGrounds.on("add", this.render, this);
+        this.playGrounds.on("remove", this.render, this);
+        this.playGrounds.on("reset", this.render, this);
     },
     reload: function(){
-        this.playGrounds = new PlayGroundCollection();
-        this.load_data();
+        this.playGrounds.reset();
+        this.playGrounds.fetch();
     },
     render: function() {
         this.$el.html('');
@@ -87,7 +79,7 @@ var PlayGroundsView = Backbone.View.extend({
 });
 
 var CreatePlaygroundModal = Backbone.Modal.extend({
-    template: '#modal-template',
+    template: '#create_playground-template',
     cancelEl: '.close-button',
     submitEl: '.create-button',
     events: {
@@ -106,6 +98,8 @@ var PlayGroundButtons = Backbone.View.extend({
     events: {
         'click #create_playground': 'create_playground',
         'click #refresh_playgrounds': 'refresh_playgrounds',
+        'click #search_playgrounds': 'search_playground',
+        'keyup #search_ground_name': 'search_playground',
     },
     initialize: function() {
         this.render();
@@ -113,11 +107,27 @@ var PlayGroundButtons = Backbone.View.extend({
     render: function() {
         return this;
     },
-    create_playground: function(){
+    create_playground: function() {
         var modalView = new CreatePlaygroundModal();
         $('.playground-modal').html(modalView.render().el);
     },
-    refresh_playgrounds: function(){
+    refresh_playgrounds: function() {
         app.playground_view.reload();
+    },
+    search_playground: function(e) {
+        if (e.type == 'click' || (e.type == 'keyup' && e.keyCode == 13)) {
+            var search_value = $('input[name="search_ground_name"]').val();
+            var foundModels = app.playground_view.playGrounds.fetch({ data: { name: search_value} });
+        }
     }
+});
+
+var GameView = Backbone.View.extend({
+    template: '#game-template',
+    initialize: function() {
+        this.render();
+    },
+    render: function() {
+        return this;
+    },
 });

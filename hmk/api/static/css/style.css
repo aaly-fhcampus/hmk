@@ -41,9 +41,8 @@ body {
     cursor: pointer;
 }
 
-.clickable:hover {
-    cursor: pointer;
-    background-color: #3F3F3F;
+.clickable > td {
+    padding-left: 15px !important;
 }
 
 tr {

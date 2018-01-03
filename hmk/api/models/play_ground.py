@@ -35,7 +35,7 @@ class PlayGround(db.Model):
             'id': self.id,
             'name': self.name,
             'players': self.players,
-            'draw_pile': self.draw_pile if self.draw_pile else False,
-            'discard_pile': self.discard_pile if self.discard_pile else False,
+            'draw_pile': self.draw_pile.id if self.draw_pile else False,
+            'discard_pile': self.discard_pile.id if self.discard_pile else False,
             'max_players': self.max_players
         }

@@ -11,6 +11,10 @@ socket.on('register_player', function(data) {
     $('.lobby').toggle('slow');
 });
 
+socket.on('create_playground', function(data) {
+    app.playground_view.playGrounds.add(data.data);
+});
+
 var app = {};
 
 app.login = new LoginView();

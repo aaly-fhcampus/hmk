@@ -9,7 +9,7 @@
 <div class="main-content" id="main_content">
 
     <div class="lobby">
-        <table class="table table-striped" style="width: 100%; height: 90%;">
+        <table class="table table-hover" style="width: 100%; height: 90%;">
             <thead>
             <tr>
                 <th>Name</th>
@@ -20,8 +20,9 @@
         </table>
         <div id="playground_buttons" class="row" style="width:100%; height:10%">
             <div class="col-xs-6">
-                <input type="text" name="search_ground_name" class="form-control" placeholder="Search ...">
-            </div>
+                <input type="text" name="search_ground_name"
+                       id="search_ground_name" class="form-control" placeholder="Search ...">
+                </div>
             <div class="col-xs-2">
                 <button id="search_playgrounds" class="btn btn-success btn-md">Search Playground</button>
             </div>
@@ -40,7 +41,7 @@
 {{ super() }}
 <script type="text/template" id="lobby-template">
     <td><%= name %></td>
-    <td><%= players %></td>
+    <td><%= playground_player %></td>
 </script>
 <script type="text/template" id="login-template">
     <div class="login">
@@ -51,7 +52,7 @@
         </div>
     </div>
 </script>
-<script type="text/template" id="modal-template">
+<script type="text/template" id="create_playground-template">
     <div class="bbm-modal__topbar">
         <h3 class="bbm-modal__title">Backbone.Modal</h3>
     </div>

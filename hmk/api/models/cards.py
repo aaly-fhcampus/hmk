@@ -39,8 +39,8 @@ class Card(db.Model):
         return {
             'id': self.id,
             'name': self.name,
-            'category': self.category,
-            'color': self.color,
+            'category': self.category.value if self.category else False,
+            'color': self.color.value if self.color else False,
             'uid': self.uid,
             'type': self.type
         }

@@ -1,4 +1,4 @@
-psql -d template1 -U aaly
+sudo -u postgres psql
 CREATE USER admin WITH PASSWORD 'admin';
 CREATE DATABASE hmk;
 GRANT ALL PRIVILEGES ON DATABASE hmk to admin;

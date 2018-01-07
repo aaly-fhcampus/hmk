@@ -3,3 +3,5 @@ Flask
 Flask-Bootstrap
 Flask-SocketIO
 Flask-SQLAlchemy
+psycopg2
+eventlet

@@ -25,7 +25,7 @@ body {
     transform: translate(-50%, -50%);
 }
 
-.lobby {
+.lobby, .game {
     display: none;
     background-color: #FFFFFF;
     width: 1024px;
@@ -57,4 +57,84 @@ tbody{
     height: 80%;
     width: 100%;
     position: absolute;
+}
+
+.player-head {
+
+}
+
+.head-circle {
+    position: relative;
+    width: 25px;
+    float: left;
+    height: 25px;
+    border-radius: 12.5px;
+    font-size: 25px;
+    color: #fff;
+    line-height: 25px;
+    text-align: center;
+    background: #000;
+    z-index: 2;
+}
+
+.player-name {
+    position: relative;
+    float: left;
+    margin-left: -25px;
+    padding-left: 15px;
+    width: 125px;
+    height: 25px;
+    border-radius: 12.5px;
+    color: #000000;
+    line-height: 25px;
+    text-align: center;
+    background: #FFFFFF;
+    z-index: 1;
+}
+
+.cards {
+    position: relative;
+    width: 120px;
+    height: 70px;
+    margin-left: 10px;
+    padding: 5px;
+}
+
+.card-1, .card-2, .card-3, .card-4, .card-5 {
+	position: relative;
+    float: left;
+    width: 25px;
+    height: 45px;
+    border: 1px solid #000000;
+    margin-left: -4px;
+    background-color: white;
+}
+
+.card-1 {
+    transform: rotate(-20deg);
+    margin-top: 7px;
+    z-index: 5;
+}
+
+.card-2 {
+    transform: rotate(-10deg);
+    margin-top: 1px;
+    z-index: 4;
+}
+
+.card-3 {
+margin-top: -1px;
+	z-index: 3;
+}
+
+.card-4 {
+    transform: rotate(10deg);
+    margin-top: 1px;
+    z-index: 2;
+}
+
+.card-5 {
+    transform: rotate(20deg);
+    margin-top: 7px;
+    z-index: 1;
 }

@@ -23,7 +23,7 @@ var PlayGroundView = Backbone.View.extend({
     tagName: 'tr',
     className : 'clickable',
     events: {
-        'click': 'showMenu'
+        'click': 'open_game'
     },
     template: _.template($('#lobby-template').html()),
     initialize: function() {
@@ -32,11 +32,13 @@ var PlayGroundView = Backbone.View.extend({
     render: function() {
         this.model.attributes.playground_player = ""+this.model.attributes.players.length+" / "+this.model.attributes.max_players;
         this.$el.html(this.template(this.model.attributes));
+        this.$el.data( "playground", { id: this.model.attributes.id} );
         return this;
     },
-    showMenu: function() {
-        var itemColl = new ItemColl();
-        new MenuView({collection: itemColl}); // how to pass the position of menu here?
+    open_game: function(e) {
+        $('.lobby').toggle('slow');
+        app.game_view = new GameView();
+        socket.emit('join', {room: 'playground_'+$(e.currentTarget).data('playground').id, player: app.player.name});
     }
 });
 
@@ -71,11 +73,12 @@ var PlayGroundsView = Backbone.View.extend({
 
         return this;
     },
-    create_playground: function(){
-        var modalView = new Modal();
-        $('.playground-modal').html(modalView.render().el);
+    show: function() {
+        this.$el.show();
+    },
+    hide: function() {
+        this.$el.hide();
     }
-
 });
 
 var CreatePlaygroundModal = Backbone.Modal.extend({
@@ -123,11 +126,26 @@ var PlayGroundButtons = Backbone.View.extend({
 });
 
 var GameView = Backbone.View.extend({
-    template: '#game-template',
+    el : '.main-content',
+    events: {
+
+    },
+    template: _.template($('#game-template').html()),
     initialize: function() {
         this.render();
+        this.toggle();
     },
     render: function() {
+        this.$el.append(this.template());
         return this;
     },
+    show: function() {
+        $('#game').show();
+    },
+    hide: function() {
+        $('#game').hide();
+    },
+    toggle: function() {
+        $('#game').toggle('slow');
+    }
 });

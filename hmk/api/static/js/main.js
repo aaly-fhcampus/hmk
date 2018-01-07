@@ -1,24 +1,28 @@
 
-var socket = io.connect('http://' + document.domain + ':' + location.port);
+var app = {};
+app.login = new LoginView();
+app.playground_buttons = new PlayGroundButtons();
+
+var socket = io.connect('http://' + document.domain + ':' + location.port+ '/');
 socket.on('connect', function() {
-    socket.emit('my event', {data: 'I\'m connected!'});
+    console.log('I\'m connected!');
 });
 
 socket.on('register_player', function(data) {
+    app.player = data.data;
     console.log(data.data);
     $('.login').toggle('slow');
     init_lobby();
     $('.lobby').toggle('slow');
 });
 
+socket.on('message', function (data) {
+    console.log(data);
+});
+
 socket.on('create_playground', function(data) {
     app.playground_view.playGrounds.add(data.data);
 });
-
-var app = {};
-
-app.login = new LoginView();
-app.playground_buttons = new PlayGroundButtons();
 
 function init_lobby() {
     app.playground_view = new PlayGroundsView();

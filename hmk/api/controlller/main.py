@@ -15,7 +15,7 @@ def index():
 @mod.route("/playgrounds", methods=['GET'])
 def get_playgrounds():
     if request.args.get('name'):
-        playgrounds = PlayGround.query.filter(PlayGround.name.like(request.args.get('name')))
+        playgrounds = PlayGround.query.filter(PlayGround.name.like(request.args.get('name')+'%'))
     else:
         playgrounds = PlayGround.query.all()
     playground_list = []

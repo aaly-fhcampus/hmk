@@ -4,7 +4,7 @@ from hmk.api.models.player import Player
 from hmk.api.models.play_ground import PlayGround
 from hmk.api.models.enums import DeckType
 
-from flask_socketio import emit, send
+from flask_socketio import emit, send, join_room, leave_room
 from hmk import socketio
 from hmk.api import db
 
@@ -29,5 +29,21 @@ def create_playground(data):
     db.session.add_all(cards)
     db.session.commit()
     emit('create_playground', {'data': playground.serialize})
+
+
+@socketio.on('join')
+def on_join(data):
+    player = data['player']
+    room = data['room']
+    join_room(room)
+    send(player + ' has entered the room.', room=room)
+
+
+@socketio.on('leave')
+def on_leave(data):
+    username = data['username']
+    room = data['room']
+    leave_room(room)
+    send(username + ' has left the room.', room=room)
     
 

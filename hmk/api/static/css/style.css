@@ -52,8 +52,13 @@ tr {
     table-layout: fixed;
 }
 
+thead {
+    position: absolute;
+}
+
 tbody{
     overflow-y: scroll;
+    top: 60px;
     height: 80%;
     width: 100%;
     position: absolute;
@@ -90,6 +95,68 @@ tbody{
     text-align: center;
     background: #FFFFFF;
     z-index: 1;
+}
+
+.players {
+    position: absolute;
+    left: 15px;
+    right: 15px;
+    bottom: 100px;
+}
+
+.player-sm-1, .player-sm-2, .player-sm-3, .player-sm-4, .player-sm-5 {
+    position: absolute;
+    width: 120px;
+    height: 80px;
+    float: left;
+}
+
+.player-sm-1 {
+    left: 0px;
+    bottom: 100px;
+}
+
+.player-sm-2 {
+    left: 0px;
+}
+
+.player-sm-3 {
+    left: 50%;
+    transform: translate(-50%, 0%);
+}
+
+.player-sm-4 {
+    right:  0px;
+}
+
+.player-sm-5 {
+    bottom: 100px;
+    right: 0px;
+}
+
+.discard-pile {
+    left: 45%;
+}
+
+.draw-pile {
+    left: 60%;
+}
+
+.pile {
+    position: absolute;
+    padding: 5px;
+    top: 50%;
+    transform: translate(-50%, 50%);
+}
+
+.pile-card {
+    position: relative;
+    float: left;
+    width: 25px;
+    height: 45px;
+    border: 1px solid #000000;
+    margin-left: -20px;
+    background-color: white;
 }
 
 .cards {

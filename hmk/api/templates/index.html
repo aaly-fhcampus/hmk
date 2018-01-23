@@ -33,6 +33,7 @@
         </div>
     </div>
     <div class="playground-modal"></div>
+    <div class="warning-modal"></div>
 
 </div>
 {% endblock %}
@@ -64,41 +65,53 @@
         <a href="#" class="create-button btn btn-primary btn-md">Create</a>
     </div>
 </script>
+<script type="text/template" id="warning_modal-template">
+    <div class="bbm-modal__topbar">
+        <h3 class="bbm-modal__title"><%= title %></h3>
+    </div>
+    <div class="bbm-modal__section">
+        <div class="text-center"><%= message %></div>
+    </div>
+    <div class="bbm-modal__bottombar">
+        <a href="#" class="close-button btn btn-default btn-md">Close</a>
+    </div>
+</script>
 <script type="text/template" id="game-template">
     <div class="game" id="game" style="">
         <div class="row" style="height: 10%; background-color: red;"></div>
         <div class="row" style="height: 80%; background-color: blue;">
             <div class="col-xs-2" style="height: 100%; background-color: yellow;"></div>
-            <div class="col-xs-8" style="height: 100%; background-color: blue;">
-                <div class="row">
-                    <div class="col-xs-4">
-                        <div class="player">
-                            <div class="row">
-                                <div class="cards mt-32">
-                                    <div class="card-1"></div>
-                                    <div class="card-2"></div>
-                                    <div class="card-3"></div>
-                                    <div class="card-4"></div>
-                                    <div class="card-5"></div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="player-head">
-                                    <div class="head-circle"></div>
-                                    <div class="player-name"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-4"></div>
-                    <div class="col-xs-4"></div>
-                </div>
+            <div class="col-xs-8 middle" style="height: 100%; background-color: blue;">
 
             </div>
             <div class="col-xs-2" style="height: 100%; background-color: green;"></div>
         </div>
         <div class="row" style="height: 10%; background-color: red;"></div>
     </div>
+</script>
+<script type="text/template" id="player-template">
+    <div class="row">
+        <div class="cards mt-32">
+            <div class="card-1"></div>
+            <div class="card-2"></div>
+            <div class="card-3"></div>
+            <div class="card-4"></div>
+            <div class="card-5"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="player-head">
+            <div class="head-circle"><%= name_short %></div>
+            <div class="player-name"><%= name %></div>
+        </div>
+    </div>
+</script>
+<script type="text/template" id="pile-template">
+    <div class="pile-card"></div>
+    <div class="pile-card"></div>
+    <div class="pile-card"></div>
+    <div class="pile-card"></div>
+    <div class="pile-card"></div>
 </script>
 <script type="text/javascript" src="static/lib/underscore-min.js"></script>
 <script type="text/javascript" src="static/lib/backbone-min.js"></script>

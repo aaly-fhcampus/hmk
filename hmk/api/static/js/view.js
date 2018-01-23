@@ -10,6 +10,7 @@ var LoginView = Backbone.View.extend({
     },
     render: function() {
         this.$el.append(this.template());
+        $('.login input[name="name"]').focus();
         return this;
     },
     login: function(e) {
@@ -36,9 +37,7 @@ var PlayGroundView = Backbone.View.extend({
         return this;
     },
     open_game: function(e) {
-        $('.lobby').toggle('slow');
-        app.game_view = new GameView();
-        socket.emit('join', {room: 'playground_'+$(e.currentTarget).data('playground').id, player: app.player.name});
+        socket.emit('join_playground', {room: 'playground_'+$(e.currentTarget).data('playground').id, player: {player_id: app.player.id, player_name:app.player.name}});
     }
 });
 
@@ -131,12 +130,21 @@ var GameView = Backbone.View.extend({
 
     },
     template: _.template($('#game-template').html()),
-    initialize: function() {
+    initialize: function(playground_id) {
+        this.playground_id = playground_id;
+        // get Players
+        playground = app.playground_view.playGrounds.get(playground_id);
+        this.playersView = new PlayersView(playground.get('players'));
+        this.discardPileView = new PileView({model:new CardDeck({id:playground.get('discard_pile')})});
+        this.drawPileView = new PileView({model:new CardDeck({id:playground.get('draw_pile')})});
         this.render();
         this.toggle();
     },
     render: function() {
         this.$el.append(this.template());
+        this.$el.find('.middle').append(this.playersView.el);
+        this.$el.find('.middle').append(this.discardPileView.el);
+        this.$el.find('.middle').append(this.drawPileView.el);
         return this;
     },
     show: function() {
@@ -149,3 +157,127 @@ var GameView = Backbone.View.extend({
         $('#game').toggle('slow');
     }
 });
+
+
+var MessageModal = Backbone.Modal.extend({
+    template: '#warning_modal-template',
+    cancelEl: '.close-button',
+    initialize: function() {
+        $('.warning-modal').html(this.render().el);
+        var data = this.serializeData();
+        if (data.type === 'warning') {
+            $('.warning-modal').find('.bbm-modal__section div').addClass("text-danger");
+        }
+        if (data.type === 'info') {
+            $('.warning-modal').find('.bbm-modal__section div').addClass("text-info");
+        }
+    }
+});
+
+var PlayerView = Backbone.View.extend({
+    tagName: 'div',
+    className : 'player',
+    events: {
+        'click': 'show_info'
+    },
+    template: _.template($('#player-template').html()),
+    initialize: function(className) {
+        if (className) {
+            this.className = className;
+        }
+        _.bindAll(this, 'render');
+    },
+    render: function() {
+        this.model.set('name_short', this.model.get('name').charAt(0).toUpperCase());
+        this.$el.html(this.template(this.model.attributes));
+        return this;
+    },
+    show_info: function(e) {
+        new MessageModal({
+            model: new Message({title: 'Player info', message: 'Player name: '+this.model.attributes.name, type: 'info'})
+        });
+    }
+});
+
+var PlayersView = Backbone.View.extend({
+    tagName: 'div',
+    className : 'players',
+    initialize: function(ids) {
+        var self = this;
+        self.players = new PlayerCollection();
+        this.players.add(app.player);
+        ids.forEach(function(player_id){
+            self.players.add(new Player({id:player_id}));
+        });
+        this.render();
+
+        this.players.on("add", this.add_player, this);
+        this.players.on("change", this.render, this);
+        this.players.on("remove", this.render, this);
+    },
+    add_player: function() {
+        this.render();
+    },
+    remove_player: function() {
+        this.render();
+    },
+    render: function() {
+        this.$el.html('');
+        var idx = 1;
+        this.players.each(function(model) {
+            var player = new PlayerView({
+                className: 'player-sm-'+idx,
+                model: model
+            });
+            idx++;
+
+            this.$el.append(player.render().el);
+        }.bind(this));
+
+        return this;
+    },
+    show: function() {
+        this.$el.show();
+    },
+    hide: function() {
+        this.$el.hide();
+    }
+});
+
+var PileView = Backbone.View.extend({
+    tagName: 'div',
+    className : 'pile',
+    template: _.template($('#pile-template').html()),
+    events: {
+        'click': 'show_info'
+    },
+    initialize: function() {
+        var self = this;
+        this.model.fetch().done(function(){
+            _.bindAll(self, 'render');
+            self.render();
+        });
+    },
+    render: function() {
+        if (DeckType[this.model.get('deck_type')] === 'DISCARD_DECK') {
+            this.$el.addClass('discard-pile');
+        }
+        if (DeckType[this.model.get('deck_type')] === 'DRAW_PILE') {
+            this.$el.addClass('draw-pile');
+        }
+        this.$el.html(this.template(this.model.attributes));
+        return this;
+    },
+    show_info: function(e) {
+        new MessageModal({
+            model: new Message({title: 'Pile info', message: DeckType[this.model.get('deck_type')], type: 'info'})
+        });
+    },
+    show: function() {
+        this.$el.show();
+    },
+    hide: function() {
+        this.$el.hide();
+    }
+});
+

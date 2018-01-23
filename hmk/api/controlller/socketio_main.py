@@ -31,12 +31,24 @@ def create_playground(data):
     emit('create_playground', {'data': playground.serialize})
 
 
-@socketio.on('join')
+@socketio.on('join_playground')
 def on_join(data):
     player = data['player']
     room = data['room']
+    player = Player.query.get(int(player.get('player_id', False)))
+    playground_id = int(room.replace('playground_', ''))
+    playground = PlayGround.query.get(playground_id)
+    if len(playground.players) == playground.max_players:
+        emit('join_playground', {'joined': False, 'message': 'This Playground is already full'})
+        return True
+    playground.players.append(player)
+    db.session.add(playground)
+    db.session.commit()
     join_room(room)
-    send(player + ' has entered the room.', room=room)
+    emit('join_playground', {'joined': True, 'message': 'You joind the playground', 'playground_id': playground_id},
+         room=room)
+    send(player.name + ' has entered the room.', room=room)
+    return True
 
 
 @socketio.on('leave')
@@ -45,5 +57,3 @@ def on_leave(data):
     room = data['room']
     leave_room(room)
     send(username + ' has left the room.', room=room)
-    
-

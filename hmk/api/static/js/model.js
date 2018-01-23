@@ -6,21 +6,11 @@ var PlayGround = Backbone.Model.extend({
         discard_pile: null,
         max_players: null
     },
-    init_decks: function() {
-        var discard_pile = new CardDeck({id:this.attributes.discard_pile});
-        discard_pile.fetch();
-        this.attributes.discard_pile = discard_pile;
-
-        var draw_pile = new CardDeck({id:this.attributes.draw_pile});
-        draw_pile.fetch();
-        this.attributes.draw_pile = draw_pile;
-
-    }
 });
 
 var PlayGroundCollection = Backbone.Collection.extend({
     model: PlayGround,
-    url: '/api/playgrounds'
+    url: '/api/playground'
 });
 
 var Card = Backbone.Model.extend({
@@ -37,7 +27,6 @@ var Card = Backbone.Model.extend({
         if (this.id) {
             this.fetch();
         }
-
     }
 });
 
@@ -50,13 +39,51 @@ var CardDeck = Backbone.Model.extend({
     defaults: {
         name: '',
         cards: new CardCollection(),
-        type: ''
+        deck_type: ''
     },
     initialize: function() {
-        this.fetch();
+        if (this.id) {
+            this.fetch();
+        }
     },
     parse: function(response) {
         response.cards = new CardCollection(response.cards);
         return response;
     }
 });
+
+var Message = Backbone.Model.extend({
+    defaults: {
+        title: 'Info',
+        message: '',
+        type: 'info'
+    }
+});
+
+var Player = Backbone.Model.extend({
+    urlRoot: '/api/player',
+    defaults: {
+        id: null,
+        name: '',
+        card_deck: new CardDeck(),
+    },
+    initialize: function() {
+        if (this.id) {
+            this.fetch();
+        }
+    },
+    parse: function(response) {
+        response.card_deck = new CardDeck(response.card_deck);
+        return response;
+    }
+});
+
+var PlayerCollection = Backbone.Collection.extend({
+    model: Player
+});
+
+var DeckType = {
+    1: 'PLAYER_DECK',
+    2: 'DISCARD_DECK',
+    3: 'DRAW_PILE'
+};
